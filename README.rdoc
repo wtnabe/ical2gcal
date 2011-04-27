@@ -26,8 +26,8 @@ sync ics(es) to google calendar
 
 == How to config pit
 
-i)  SET ENVIRONMENT VARIABLE **EDITOR**
-ii) type
+1. SET ENVIRONMENT VARIABLE **EDITOR**
+2. type
 
  pit set google
 
