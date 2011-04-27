@@ -97,7 +97,7 @@ module Ical2gcal
       begin
         PTY.spawn( 'google calendar list' ) { |r, w|
           r.expect( /(?:user|pass)/, 3 ) { |s|
-            raise GoogleclNotAuthenticated if ( s[0] =~ /(?:user|pass)/ )
+            raise GoogleclNotAuthenticated if ( s and s[0] =~ /(?:user|pass)/ )
           }
         }
       rescue GoogleclNotAuthenticated
