@@ -19,12 +19,15 @@ Gem::Specification.new do |s|
     "README.rdoc"
   ]
   s.files = [
+    ".document",
+    ".rspec",
     "Gemfile",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
     "VERSION",
     "bin/ical2gcal",
+    "ical2gcal.gemspec",
     "lib/google_calendar.rb",
     "lib/ical2gcal.rb",
     "lib/ics.rb",
