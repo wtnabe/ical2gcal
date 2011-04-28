@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ical2gcal}
-  s.version = "0.2.2"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["wtnabe"]
-  s.date = %q{2011-04-27}
+  s.date = %q{2011-04-28}
   s.default_executable = %q{ical2gcal}
   s.description = %q{You can sync local and remote ics file(s) to google calendar}
   s.email = %q{wtnabe@gmail.com}
