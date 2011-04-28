@@ -12,7 +12,6 @@ module Ical2gcal
       def initialize( uri )
         @uri       = uri
         @calendars = nil
-        @events    = []
       end
 
       def calendars

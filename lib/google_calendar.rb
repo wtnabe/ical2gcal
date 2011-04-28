@@ -47,12 +47,12 @@ module Ical2gcal
         e            = Event.new( service )
         e.calendar   = calendar
         e.title      = event.summary
-        e.start_time = Time.iso8601(event.start_time.to_s)
-        e.all_day    = event.all?
+        e.start_time = Time.parse(event.start_time.to_s.sub(/\+.*/, ''))
+        e.all_day    = e.start_time.hour == 0 and e.start_time.min == 0 and not event.respond_to? :end_time
         e.end_time   = if event.respond_to? :end_time
-                         Time.iso8601(event.end_time.to_s)
+                         Time.parse(event.end_time.to_s.sub(/\+.*/, ''))
                        else
-                         Time.iso8601(event.start_time.to_s)
+                         Time.parse(event.start_time.to_s.sub(/\+.*/, ''))
                        end
         e.save
       rescue
