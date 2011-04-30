@@ -5,28 +5,28 @@ sync ics(es) to google calendar
 == Benefits
 
 * Solve the PROBLEM that Android's calendar program cannot reference webcal !
-* Complete sync calendar from .ics to google calendar ( also deleting )
+* Complete sync calendar from .ics to google calendar ( also deleting events )
 
 == Requirements
 
 * PC :-)
 * Ruby ( tested with CRuby 1.8.7 )
-* RiCal
-* GCal4ruby
-* Pit
-* Googlecl ( made with Python )
+* ri_cal      http://ri-cal.rubyforge.org/
+* gcalapi     http://gcalapi.rubyforge.org/
+* simple-rss  http://simple-rss.rubyforge.org/
+* pit         http://coderepos.org/share/browser/lang/ruby/pit
 
 == How to use
 
-1. Install Ruby and gems.
-2. Install Googlecl from http://code.google.com/p/googlecl/
+1. Install Ruby
+2. `gem install ical2gcal`
 3. Setup Your Google account info using Pit
 4. Prepare calendar that you like to import to
-5. Here we go !
+5. type `ical2gcal --help`
 
 == How to config pit
 
-1. SET ENVIRONMENT VARIABLE **EDITOR**
+1. SET ENVIRONMENT VARIABLE *EDITOR*
 2. type
 
  pit set google
@@ -35,7 +35,7 @@ ex)
 
     username: `google account'
     password: PASSWORD
-    calendar:
+    calendar:                       ( optional below )
       name: `calendar name above'
 
 == Contributing to ical2gcal
