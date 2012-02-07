@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{ical2gcal}
-  s.version = "0.3.0"
+  s.name = "ical2gcal"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["wtnabe"]
-  s.date = %q{2011-04-30}
-  s.description = %q{You can sync local and remote ics file(s) to google calendar}
-  s.email = %q{wtnabe@gmail.com}
+  s.date = "2012-02-07"
+  s.description = "You can sync local and remote ics file(s) to google calendar"
+  s.email = "wtnabe@gmail.com"
   s.executables = ["ical2gcal"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -38,11 +38,11 @@ Gem::Specification.new do |s|
     "spec/support/ics_list.txt",
     "spec/support/japanese_holidays.ics"
   ]
-  s.homepage = %q{http://github.com/wtnabe/ical2gcal}
+  s.homepage = "http://github.com/wtnabe/ical2gcal"
   s.licenses = ["two-clause BSD"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.7.2}
-  s.summary = %q{sync ics(es) to google calendar}
+  s.rubygems_version = "1.8.10"
+  s.summary = "sync ics(es) to google calendar"
   s.test_files = [
     "spec/ics/events_spec.rb",
     "spec/ics/list_spec.rb",
@@ -57,7 +57,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<gcalapi>, [">= 0"])
       s.add_runtime_dependency(%q<simple-rss>, [">= 0"])
       s.add_runtime_dependency(%q<pit>, [">= 0"])
-      s.add_development_dependency(%q<rspec>, ["~> 2.3.0"])
+      s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
@@ -70,7 +70,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<gcalapi>, [">= 0"])
       s.add_dependency(%q<simple-rss>, [">= 0"])
       s.add_dependency(%q<pit>, [">= 0"])
-      s.add_dependency(%q<rspec>, ["~> 2.3.0"])
+      s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
@@ -84,7 +84,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<gcalapi>, [">= 0"])
     s.add_dependency(%q<simple-rss>, [">= 0"])
     s.add_dependency(%q<pit>, [">= 0"])
-    s.add_dependency(%q<rspec>, ["~> 2.3.0"])
+    s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])

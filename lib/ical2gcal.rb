@@ -17,15 +17,25 @@ module Ical2gcal
     def run
       opts.parse( ARGV )
 
-      opts = ::Pit.get('google')
-      opts.merge!( {'calendar' => {'name' => @target}} ) if @target
-      g = Ical2gcal::Google.new( opts )
+      conf = ::Pit.get('google')
+      conf.merge!( {'calendar' => {'name' => @target}} ) if @target
+      g = Ical2gcal::Google.new( conf )
       g.remove_all_events
-      calendars.each { |c|
-        Ical2gcal::Ics::Events.new( c ).each { |e|
-          g.create_event( e )
+      if calendars
+        cals = case calendars
+               when Array
+                 calendars
+               else
+                 [calendars]
+               end
+        cals.each { |c|
+          Ical2gcal::Ics::Events.new( c ).each { |e|
+            g.create_event( e )
+          }
         }
-      }
+      else
+        puts opts
+      end
     end
 
     #
