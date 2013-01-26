@@ -47,7 +47,7 @@ end
 
 task :default => :spec
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
@@ -55,4 +55,11 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "ical2gcal #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+namespace :git do
+  desc 'git ls-files -o'
+  task :untracked do
+    sh 'git ls-files -o -X .gitignore'
+  end
 end
