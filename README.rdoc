@@ -1,5 +1,7 @@
 = ical2gcal
 
+{<img src="https://travis-ci.org/wtnabe/ical2gcal.png" alt="Build Status" />}[https://travis-ci.org/wtnabe/ical2gcal]
+
 sync ics(es) to google calendar
 
 == Benefits
@@ -10,7 +12,7 @@ sync ics(es) to google calendar
 == Requirements
 
 * PC :-)
-* Ruby ( tested with CRuby 1.8.7 )
+* Ruby ( tested with REE 1.8.7 and CRuby 1.9.3)
 * ri_cal      http://ri-cal.rubyforge.org/
 * gcalapi     http://gcalapi.rubyforge.org/
 * simple-rss  http://simple-rss.rubyforge.org/
