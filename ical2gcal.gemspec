@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ical2gcal"
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["wtnabe"]
-  s.date = "2013-01-27"
+  s.date = "2013-05-15"
   s.description = "You can sync local and remote ics file(s) to google calendar"
   s.email = "wtnabe@gmail.com"
   s.executables = ["ical2gcal"]
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     ".rspec",
+    ".travis.yml",
     "Gemfile",
     "LICENSE.txt",
     "README.rdoc",
@@ -41,7 +42,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/wtnabe/ical2gcal"
   s.licenses = ["two-clause BSD"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
+  s.rubygems_version = "1.8.11"
   s.summary = "sync ics(es) to google calendar"
 
   if s.respond_to? :specification_version then
