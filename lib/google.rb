@@ -73,9 +73,44 @@ module Ical2gcal
     end
 
     def remove_all_events
-      calendar.events.each { |e|
-        e.destroy!
-      }
+      events    = calendar.events
+      max_retry = 3
+
+      omni_retry = max_retry
+
+      while events.size > 0 and omni_retry > 0
+        events.each { |e|
+          remove_one_event(e, max_retry)
+        }
+        omni_retry -= 1
+
+        sleep 1
+      end
     end
+
+    #
+    # remove one event with retry
+    #
+    # [param] GoogleCalendar::Event
+    # [param] Fixnum
+    #
+    def remove_one_event(e, num_retry)
+      begin
+        e.destroy!
+      rescue => e
+        case e
+        when NoMethodError
+          ;
+        else
+          num_retry -= 1
+          if num_retry > 0
+            sleep 1 and retry
+          else
+            raise e
+          end
+        end
+      end
+    end
+
   end
 end
