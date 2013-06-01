@@ -6,6 +6,8 @@ require 'optparse'
 require 'pit'
 
 module Ical2gcal
+  class MissingPitConfigOfGoogleAccount < StandardError; end
+
   class App
     def initialize
       @ics       = nil
@@ -17,7 +19,7 @@ module Ical2gcal
     def run
       opts.parse( ARGV )
 
-      conf = ::Pit.get('google')
+      conf = pit_get_google
       conf.merge!( {'calendar' => {'name' => @target}} ) if @target
       g = Ical2gcal::Google.new( conf )
       g.remove_all_events
@@ -35,6 +37,19 @@ module Ical2gcal
         }
       else
         puts opts
+      end
+    end
+
+    #
+    # [return] Hash
+    #
+    def pit_get_google
+      info = ::Pit.get('google')
+
+      if info.size > 0
+        info
+      else
+        raise MissingPitConfigOfGoogleAccount, 'execute "pit set google"'
       end
     end
 
