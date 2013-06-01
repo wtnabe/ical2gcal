@@ -5,6 +5,8 @@ require File.dirname( __FILE__ ) + '/google'
 require 'optparse'
 require 'pit'
 
+Version = open(File.dirname(__FILE__) + '/../VERSION').read
+
 module Ical2gcal
   class MissingPitConfigOfGoogleAccount < StandardError; end
 
