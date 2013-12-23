@@ -9,6 +9,16 @@ sync ics(es) to google calendar
 * Solve the PROBLEM that Android's calendar program cannot reference webcal !
 * Complete sync calendar from .ics to google calendar ( also deleting events )
 
+== Known Problems
+
+Ical2gcal depends on gcalapi gem for google calendar access. Ical2gcal with 'gcalapi 0.1.2r' cannot be installed as standalone. ( I've failed to generate gcalapi gem package. ) Use with Bundler as below.
+
+ gem 'gcalapi', :github => 'wtnabe/gcalapi'
+
+and bundle install ( or bundle update ) .
+
+Gcalapi 0.1.2r breaks compatibility with Ruby 1.8.x. So ical2gcal 0.4.2 does.
+
 == Requirements
 
 * PC :-)
