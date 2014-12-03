@@ -8,9 +8,9 @@ source "http://rubygems.org"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 gem 'ri_cal'
-gem 'gcalapi', :git => 'https://github.com/wtnabe/gcalapi'
-gem 'simple-rss'
-gem 'pit'
+
+gem 'google_calendar', :git => 'https://github.com/northworld/google_calendar'
+gem 'launchy'
 
 group :development do
   gem "rspec"
