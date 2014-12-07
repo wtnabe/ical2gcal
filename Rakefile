@@ -26,9 +26,7 @@ Jeweler::Tasks.new do |gem|
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
 
   gem.add_runtime_dependency 'ri_cal'
-  gem.add_runtime_dependency 'gcalapi'
-  gem.add_runtime_dependency 'simple-rss'
-  gem.add_runtime_dependency 'pit'
+  gem.add_runtime_dependency 'google-api-client'
 
   #  gem.add_development_dependency 'rspec', '> 1.2.3'
 end
