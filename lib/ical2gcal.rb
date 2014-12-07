@@ -3,28 +3,40 @@ require File.dirname( __FILE__ ) + '/ics'
 require File.dirname( __FILE__ ) + '/google'
 
 require 'optparse'
-require 'pit'
 
 Version = open(File.dirname(__FILE__) + '/../VERSION').read
 
 module Ical2gcal
-  class MissingPitConfigOfGoogleAccount < StandardError; end
-
   class App
     def initialize
-      @ics       = nil
-      @list      = nil
-      @calendars = nil
-      @target    = nil
+      @ics        = nil
+      @list       = nil
+      @calendars  = nil
+      @target     = nil
+      @credential = nil
+
+      set_credential(Dir.pwd)
+    end
+
+    #
+    # [param]  String path
+    # [return] String
+    #
+    def set_credential(path)
+      @credential = if File.directory?(path)
+                      File.join(path, '.ical2gcal_credential')
+                    else
+                      path
+                    end
     end
 
     def run
       opts.parse( ARGV )
+      unless @target
+        puts opts.help
+        exit
+      end
 
-      conf = pit_get_google
-      conf.merge!( {'calendar' => {'name' => @target}} ) if @target
-      g = Ical2gcal::Google.new( conf )
-      g.remove_all_events
       if calendars
         cals = case calendars
                when Array
@@ -32,6 +44,8 @@ module Ical2gcal
                else
                  [calendars]
                end
+        g = Ical2gcal::Google.new(@target, @credential)
+        g.remove_all_events
         cals.each { |c|
           Ical2gcal::Ics::Events.new( c ).each { |e|
             g.create_event( e )
@@ -39,19 +53,6 @@ module Ical2gcal
         }
       else
         puts opts
-      end
-    end
-
-    #
-    # [return] Hash
-    #
-    def pit_get_google
-      info = ::Pit.get('google')
-
-      if info.size > 0
-        info
-      else
-        raise MissingPitConfigOfGoogleAccount, 'execute "pit set google"'
       end
     end
 
@@ -75,14 +76,17 @@ module Ical2gcal
     #
     def opts
       OptionParser.new do |opt|
-        opt.on( '-c', '--calendar-name NAME' ) { |c|
+        opt.on( '-c', '--calendar-id ID' ) { |c|
           @target = c
         }
         opt.on( '-i', '--ics URI' ) { |i|
           @ics = i
         }
-        opt.on( '-l', '--calendar-list' ) { |l|
+        opt.on( '-l', '--calendar-list LIST' ) { |l|
           @list = l
+        }
+        opt.on( '-s', '--credential-store STORE' ) { |s|
+          set_credential(s)
         }
       end
     end

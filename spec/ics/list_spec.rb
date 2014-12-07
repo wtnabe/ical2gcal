@@ -48,12 +48,12 @@ describe Ical2gcal::Ics::List do
   describe 'with_scheme?' do
     context 'localfile' do
       it {
-        Ical2gcal::Ics::List.new( ICS_FILE ).with_scheme?.should be_false
+        Ical2gcal::Ics::List.new( ICS_FILE ).with_scheme?.should == false
       }
     end
     context 'uri' do
       it {
-        Ical2gcal::Ics::List.new( JAPANESE_HOLIDAYS ).with_scheme?.should be_true
+        Ical2gcal::Ics::List.new( JAPANESE_HOLIDAYS ).with_scheme?.should == true
       }
     end
   end

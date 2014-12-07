@@ -1,115 +1,145 @@
 # -*- mode: ruby; coding: utf-8 -*-
 
-require 'gcalapi'
-require 'simple-rss'
+require 'google/api_client'
+require 'google/api_client/client_secrets'
+require 'google/api_client/auth/installed_app'
+require 'google/api_client/auth/file_storage'
 
 module Ical2gcal
   class Google
 
-    def initialize( opts )
-      @service  = nil
-      @opts     = {
-        'username' => nil,
-        'password' => nil,
-        'calendar' => nil
-      }.merge( opts )
-      @calendar = nil
-      @events   = nil
-    end
+    class CalendarIdNotDefined < StandardError; end
 
     #
-    # [return] GoogleCalendar::Service
+    # [param] String calendar_id
+    # [param] String store
     #
-    def service
-      if ( !@service and @opts )
-        @service = GoogleCalendar::Service.new( @opts['username'],
-                                                @opts['password'] )
+    def initialize(calendar_id, store = nil)
+      raise CalendarIdNotDefined.new unless calendar_id
+
+      @calendar_id = nil
+      @calendar    = nil # Calendar API
+      @client      = nil # Google API Client
+      @events      = nil
+
+      init_and_auth_calendar(calendar_id, store)
+    end
+    attr_reader :client, :calendar, :calendar_id
+
+    #
+    # [param] String calendar_id
+    # [param] String dir
+    # [return] Object Calendar API
+    #
+    def init_and_auth_calendar(calendar_id, store)
+      @client = ::Google::APIClient.new(
+                                  :application_name    => :ical2gcal,
+                                  :application_version => Version)
+
+      credential = ::Google::APIClient::FileStorage.new(store)
+      secrets    = ::Google::APIClient::ClientSecrets.load(File.dirname(store))
+
+      if credential.authorization.nil?
+        flow = ::Google::APIClient::InstalledAppFlow.new(
+          :client_id     => secrets.client_id,
+          :client_secret => secrets.client_secret,
+          :scope         => 'https://www.googleapis.com/auth/calendar')
+        client.authorization = flow.authorize
+        credential.write_credentials(client.authorization)
+      else
+        client.authorization = credential.authorization
       end
 
-      @service
+      @calendar_id = calendar_id
+      @calendar    = client.discovered_api('calendar', 'v3')
     end
 
     #
-    # [return] Array
-    #
-    def calendars
-      SimpleRSS.parse( service.calendars.body ).entries
-    end
-
-    #
-    # [return] GoogleCalendar::Calendar
-    #
-    def calendar
-      if ( !@calendar )
-        cal = calendars.find { |c|
-          c.title == calendar_name
-        }
-        @calendar = GoogleCalendar::Calendar.new( @service, cal[:link] )
-      end
-
-      @calendar
-    end
-
-    #
+    # [param]  RiCal::Component::Event
     # [return] String
     #
-    def calendar_name
-      @opts['calendar']['name']
+    def create_event( event )
+      body = {
+        :summary     => event.summary,
+        :description => event.description,
+        :location    => event.location
+      }
+
+      if all_day?(event)
+        body.merge!(
+          :start => {:date => event.dtstart.to_s},
+          :end   => {:date => event.dtend.to_s})
+      else
+        body.merge!(
+          :start => {:dateTime => localtime(event.start_time)},
+          :end   => {:dateTime => localtime((event.respond_to? :end_time) ? event.end_time : event.start_time)})
+      end
+
+      client.execute(
+        :api_method => calendar.events.insert,
+        :parameters => {:calendarId  => calendar_id},
+        :headers    => {'Content-Type' => 'application/json'},
+        :body       => JSON.dump(body)).response.body
     end
 
-    def create_event( event )
-      e        = calendar.create_event
-      e.title  = event.summary
-      e.desc   = event.description
-      e.where  = event.location
-      e.st     = Time.parse(event.start_time.to_s.sub(/\+.*/, ''))
-      e.allday = e.st.hour == 0 and e.st.min == 0 and not event.respond_to? :end_time
-      e.en     = if event.respond_to? :end_time
-                   Time.parse(event.end_time.to_s.sub(/\+.*/, ''))
-                 else
-                   Time.parse(event.start_time.to_s.sub(/\+.*/, ''))
-                 end
-      e.save!
+    #
+    # [param]  Rical::Component::Event event
+    # [return] Boolean
+    #
+    def all_day?(event)
+      event.dtstart.class == Date
+    end
+
+    #
+    # create Time object with local timezone
+    #
+    # [param]  String datetime
+    # [return] String
+    #
+    def localtime(datetime)
+      Time.parse(datetime.iso8601.sub(/(\+.*)\z/, '')).iso8601
     end
 
     def remove_all_events
-      max_retry = 3
-
-      omni_retry = max_retry
-
-      while calendar.events.size > 0 and omni_retry > 0
-        calendar.events.each { |e|
-          remove_one_event(e, max_retry)
-        }
-        omni_retry -= 1
-
-        sleep 1
-      end
+      all_events.each {|e| remove_one_event(e)}
     end
 
     #
     # remove one event with retry
     #
     # [param] GoogleCalendar::Event
-    # [param] Fixnum
     #
-    def remove_one_event(evt, num_retry)
-      begin
-        evt.destroy!
-      rescue => e
-        case e
-        when NoMethodError
-          ;
-        else
-          num_retry -= 1
-          if num_retry > 0
-            sleep 1 and retry
-          else
-            raise e
-          end
-        end
-      end
+    def remove_one_event(event)
+      client.execute(
+        :api_method => calendar.events.delete,
+        :parameters => {:calendarId => calendar_id, :eventId => event['id']})
     end
 
+    #
+    # [return] Array
+    #
+    def all_events
+      result = events_request
+      events = result['items']
+      while ( result['nextPageToken'] )
+        result = events_request(result['nextPageToken'])
+        events += result['items']
+      end
+
+      events
+    end
+
+    #
+    # [param]  String next_page_token
+    # [return] Hash
+    #
+    def events_request(next_page_token = nil)
+      params = {:calendarId => calendar_id}
+      params.merge!(:pageToken => next_page_token) if next_page_token
+
+      JSON.parse(client.execute(
+                        :api_method => calendar.events.list,
+                        :parameters => params).response.body)
+    end
   end
 end
