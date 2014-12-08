@@ -59,16 +59,17 @@ module Ical2gcal
     # [return] String
     #
     def create_event( event )
-      body = {
-        :summary     => event.summary,
-        :description => event.description,
-        :location    => event.location
-      }
+      body = {:summary => event.summary.force_encoding('UTF-8')}
+      body.merge!(:description => event.description.force_encoding('UTF-8')) if event.description
+      body.merge!(:location    => event.location.force_encoding('UTF-8')) if event.location
 
       if all_day?(event)
+        start_date = event.dtstart.to_s
+        end_date   = event.dtend.to_s
+
         body.merge!(
-          :start => {:date => event.dtstart.to_s},
-          :end   => {:date => event.dtend.to_s})
+          :start => {:date => start_date},
+          :end   => {:date => end_date.size > 0 ? end_date : (Date.parse(start_date) + 1).to_s})
       else
         body.merge!(
           :start => {:dateTime => localtime(event.start_time)},
