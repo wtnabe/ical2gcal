@@ -98,7 +98,7 @@ module Ical2gcal
     # [return] String
     #
     def localtime(datetime)
-      Time.parse(datetime.iso8601.sub(/(\+.*)\z/, '')).iso8601
+      Time.parse(datetime.iso8601).localtime.iso8601
     end
 
     def remove_all_events
