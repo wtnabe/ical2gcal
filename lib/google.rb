@@ -102,6 +102,7 @@ module Ical2gcal
     end
 
     def remove_all_events
+      return unless all_events
       all_events.each {|e| remove_one_event(e)}
     end
 
