@@ -12,7 +12,7 @@ sync ics(es) to google calendar
 == Requirements
 
 * PC :-)
-* Ruby ( tested with CRuby 1.9.3)
+* Ruby ( tested with CRuby 2.5, 2.6, 2.7 )
 * ri_cal                 http://ri-cal.rubyforge.org/
 * google-api-ruby-client https://github.com/google/google-api-ruby-client
 
