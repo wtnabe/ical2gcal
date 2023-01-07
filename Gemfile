@@ -12,7 +12,7 @@ gem 'google-api-client', '< 0.8'
 
 group :development do
   gem "rspec"
-  gem "bundler"
+  gem "bundler", "< 2.4"
   gem "jeweler"
   gem 'pry-byebug'
   gem 'simplecov'
