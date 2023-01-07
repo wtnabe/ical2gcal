@@ -8,17 +8,12 @@ source "http://rubygems.org"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 gem 'ri_cal'
-gem 'google-api-client'
+gem 'google-api-client', '< 0.8'
 
 group :development do
   gem "rspec"
   gem "bundler"
   gem "jeweler"
-  if RUBY_VERSION < '1.9'
-    gem "ruby-debug"
-    gem "rcov", ">= 0"
-  else
-    gem "debugger"
-    gem 'simplecov'
-  end
+  gem 'pry-byebug'
+  gem 'simplecov'
 end
