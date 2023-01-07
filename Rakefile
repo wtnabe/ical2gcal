@@ -16,7 +16,7 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "ical2gcal"
   gem.homepage = "http://github.com/wtnabe/ical2gcal"
-  gem.license = "two-clause BSD"
+  gem.license = "BSD-2-Clause"
   gem.summary = %Q{sync ics(es) to google calendar}
   gem.description = %Q{You can sync local and remote ics file(s) to google calendar}
   gem.email = "wtnabe@gmail.com"
@@ -24,9 +24,6 @@ Jeweler::Tasks.new do |gem|
   gem.executables = %w( ical2gcal )
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-
-  gem.add_runtime_dependency 'ri_cal'
-  gem.add_runtime_dependency 'google-api-client'
 
   #  gem.add_development_dependency 'rspec', '> 1.2.3'
 end
