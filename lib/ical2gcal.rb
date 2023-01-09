@@ -1,10 +1,10 @@
-require 'rubygems' unless defined? ::Gem
 require File.dirname( __FILE__ ) + '/ics'
 require File.dirname( __FILE__ ) + '/google'
 
 require 'optparse'
 
-Version = open(File.dirname(__FILE__) + '/../VERSION').read
+require_relative './ical2gcal/version'
+Version = Ical2gcal::VERSION
 
 module Ical2gcal
   class App

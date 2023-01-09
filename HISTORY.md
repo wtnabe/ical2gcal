@@ -1,6 +1,7 @@
-## v0.7
+## v0.7 ( 2022-01-09 )
 
  * support Ruby version only 2.5, 2.6, 2.7
+ * drop Jeweler for simlifying dependencies and packaging gem
 
 ## v0.6 ( unreleased )
 

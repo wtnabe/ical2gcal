@@ -4,6 +4,7 @@ require 'google/api_client'
 require 'google/api_client/client_secrets'
 require 'google/api_client/auth/installed_app'
 require 'google/api_client/auth/file_storage'
+require_relative '../monkey_patches/multi_json'
 
 module Ical2gcal
   class Google
@@ -34,7 +35,9 @@ module Ical2gcal
     def init_and_auth_calendar(calendar_id, store)
       @client = ::Google::APIClient.new(
                                   :application_name    => :ical2gcal,
-                                  :application_version => Version)
+                                  :application_version => Ical2gcal::VERSION,
+                                  :user_agent => "ical2gcal-#{Ical2gcal::VERSION} (#{RUBY_PLATFORM})"
+      )
 
       credential = ::Google::APIClient::FileStorage.new(store)
       secrets    = ::Google::APIClient::ClientSecrets.load(File.dirname(store))
